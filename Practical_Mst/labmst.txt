@@ -1,0 +1,50 @@
+class Solution {
+    public boolean exist(char[][] board, String word) {
+        int m = board.length;
+        int n = board[0].length;
+        boolean[][] visited = new boolean[m][n];
+        boolean result = false;
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (board[i][j] == word.charAt(0)) {
+                    if (combo(board, word, visited, i, j, 0)) {
+                        result = true;
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private boolean combo(char[][] board, String word, boolean[][] visited, int r, int c, int index) {
+
+        if (index == word.length()) {
+            return true;
+        }
+
+        if (r < 0 || c < 0 || r >= board.length || c >= board[0].length) {
+            return false;
+        }
+
+        if (visited[r][c] || board[r][c] != word.charAt(index)) {
+            return false;
+        }
+
+        visited[r][c] = true;
+
+        boolean got = false;
+
+        if (combo(board, word, visited, r + 1, c, index + 1) ||
+            combo(board, word, visited, r - 1, c, index + 1) ||
+            combo(board, word, visited, r, c + 1, index + 1) ||
+            combo(board, word, visited, r, c - 1, index + 1)) {
+            got = true;
+        }
+
+        visited[r][c] = false;
+
+        return got;
+    }
+}
