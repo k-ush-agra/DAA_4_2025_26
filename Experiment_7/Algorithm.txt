@@ -1,0 +1,34 @@
+ALGORITHM
+
+The problem is solved using a modified Bellman-Ford algorithm to handle the constraint of at most k stops.
+
+1. Create a distance array dist[] of size n.
+   Initialize all values to infinity (Integer.MAX_VALUE).
+   Set dist[src] = 0.
+
+2. Perform relaxation of edges for k + 1 iterations.
+   Each iteration represents one edge traversal.
+
+3. For each iteration:
+   a. Create a temporary array temp[] as a copy of dist[].
+
+   b. Traverse all flights (u, v, cost):
+
+   * If dist[u] is infinity, skip.
+   * If dist[u] + cost < temp[v], then update:
+     temp[v] = dist[u] + cost.
+
+   c. After processing all flights, update:
+   dist = temp.
+
+4. After completing all k + 1 iterations:
+
+   * If dist[dst] is infinity, return -1.
+   * Otherwise, return dist[dst].
+
+KEY POINTS
+
+* Total iterations are k + 1 to ensure at most k stops.
+* Temporary array is used to avoid incorrect updates in the same iteration.
+* This approach ensures only valid paths within the stop constraint are considered.
+

@@ -1,0 +1,64 @@
+DRY RUN
+
+Input:
+n = 5
+flights =
+[
+[0,1,200],
+[1,2,300],
+[0,3,400],
+[3,2,100],
+[2,4,150]
+]
+src = 0
+dst = 4
+k = 2
+
+---
+
+Initial State:
+dist = [0, ∞, ∞, ∞, ∞]
+
+---
+
+Iteration 1 (0 stops → 1 edge allowed):
+
+* From 0 → 1 with cost 200 → dist[1] = 200
+* From 0 → 3 with cost 400 → dist[3] = 400
+
+Updated dist:
+[0, 200, ∞, 400, ∞]
+
+---
+
+Iteration 2 (up to 2 edges allowed):
+
+* From 1 → 2 with cost 200 + 300 = 500 → dist[2] = 500
+* From 3 → 2 with cost 400 + 100 = 500 → dist[2] remains 500
+
+Updated dist:
+[0, 200, 500, 400, ∞]
+
+---
+
+Iteration 3 (up to 3 edges allowed):
+
+* From 2 → 4 with cost 500 + 150 = 650 → dist[4] = 650
+
+Updated dist:
+[0, 200, 500, 400, 650]
+
+---
+
+Final Result:
+Cheapest cost from source (0) to destination (4) within k = 2 stops is:
+
+650
+
+---
+
+Explanation:
+The algorithm considers paths with at most k stops (i.e., up to k+1 edges).
+The minimum cost path found is:
+0 → 1 → 2 → 4 with total cost = 650
+
