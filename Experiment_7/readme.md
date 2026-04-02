@@ -148,4 +148,4 @@ dist = [0, 200, 500, 400, 650]
 
 Below is the screenshot of the accepted solution on LeetCode:
 
-<img width="999" height="189" alt="image" src="Screenshot 2026-03-31 191151.png" />
+<img width="1919" height="870" alt="image" src="Screenshot 2026-03-31 191151.png" />
