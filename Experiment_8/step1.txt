@@ -1,0 +1,212 @@
+import java.util.*;
+import java.time.*;
+
+class Metrics {
+String algorithmName;
+double executionTimeMs = 0.0;
+long operations = 0;
+String status = "Completed";
+}
+
+public class AlgorithmsAnalysis {
+
+```
+static final double TIMEOUT_MS = 2000.0;
+
+// 1. Binary Search
+static int binarySearch(int[] arr, int target, Metrics metrics) {
+    long start = System.nanoTime();
+    metrics.algorithmName = "Binary Search";
+    metrics.operations = 0;
+
+    int left = 0, right = arr.length - 1;
+    int result = -1;
+
+    while (left <= right) {
+        metrics.operations++;
+        int mid = left + (right - left) / 2;
+
+        if (arr[mid] == target) {
+            result = mid;
+            break;
+        }
+        if (arr[mid] < target) left = mid + 1;
+        else right = mid - 1;
+    }
+
+    long end = System.nanoTime();
+    metrics.executionTimeMs = (end - start) / 1e6;
+    return result;
+}
+
+// 2A. Subset Sum Verification
+static boolean verifySubsetSum(int[] subset, int target, Metrics metrics) {
+    long start = System.nanoTime();
+    metrics.algorithmName = "Subset Sum (Verification)";
+    metrics.operations = 0;
+
+    int sum = 0;
+    for (int num : subset) {
+        metrics.operations++;
+        sum += num;
+    }
+
+    long end = System.nanoTime();
+    metrics.executionTimeMs = (end - start) / 1e6;
+    return sum == target;
+}
+
+// 2B. Subset Sum Decision
+static boolean solveSubsetSumRec(int[] arr, int n, int target, Metrics metrics, long startTime) {
+    metrics.operations++;
+
+    long now = System.nanoTime();
+    if ((now - startTime) / 1e6 > TIMEOUT_MS) {
+        metrics.status = "Timeout";
+        return false;
+    }
+
+    if (target == 0) return true;
+    if (n == 0) return false;
+
+    if (arr[n - 1] > target) {
+        return solveSubsetSumRec(arr, n - 1, target, metrics, startTime);
+    }
+
+    return solveSubsetSumRec(arr, n - 1, target, metrics, startTime) ||
+           solveSubsetSumRec(arr, n - 1, target - arr[n - 1], metrics, startTime);
+}
+
+static boolean solveSubsetSum(int[] arr, int target, Metrics metrics) {
+    long start = System.nanoTime();
+    metrics.algorithmName = "Subset Sum (Decision)";
+    metrics.operations = 0;
+    metrics.status = "Completed";
+
+    boolean result = solveSubsetSumRec(arr, arr.length, target, metrics, start);
+
+    long end = System.nanoTime();
+    metrics.executionTimeMs = (end - start) / 1e6;
+    return result;
+}
+
+// 3. TSP Brute Force
+static int tspBruteForce(int[][] graph, Metrics metrics) {
+    long start = System.nanoTime();
+    metrics.algorithmName = "TSP (Brute Force)";
+    metrics.operations = 0;
+    metrics.status = "Completed";
+
+    int n = graph.length;
+    if (n <= 1) return 0;
+
+    List<Integer> vertices = new ArrayList<>();
+    for (int i = 1; i < n; i++) vertices.add(i);
+
+    int minPath = Integer.MAX_VALUE;
+
+    do {
+        metrics.operations++;
+
+        long now = System.nanoTime();
+        if ((now - start) / 1e6 > TIMEOUT_MS) {
+            metrics.status = "Timeout";
+            break;
+        }
+
+        int currentWeight = 0;
+        int k = 0;
+
+        for (int v : vertices) {
+            currentWeight += graph[k][v];
+            k = v;
+        }
+        currentWeight += graph[k][0];
+
+        minPath = Math.min(minPath, currentWeight);
+
+    } while (nextPermutation(vertices));
+
+    long end = System.nanoTime();
+    metrics.executionTimeMs = (end - start) / 1e6;
+    return minPath;
+}
+
+// Next Permutation (Java version)
+static boolean nextPermutation(List<Integer> arr) {
+    int i = arr.size() - 2;
+    while (i >= 0 && arr.get(i) >= arr.get(i + 1)) i--;
+
+    if (i < 0) return false;
+
+    int j = arr.size() - 1;
+    while (arr.get(j) <= arr.get(i)) j--;
+
+    Collections.swap(arr, i, j);
+    Collections.reverse(arr.subList(i + 1, arr.size()));
+    return true;
+}
+
+// Print Log
+static void printLog(Metrics m) {
+    System.out.printf("%-30s %-15s %-20d %.4f ms%n",
+            m.algorithmName, m.status, m.operations, m.executionTimeMs);
+}
+
+public static void main(String[] args) {
+    System.out.println("-------------------------------------------------------------------------------------");
+    System.out.printf("%-30s %-15s %-20s %s%n",
+            "Algorithm", "Status", "Operations Count", "Execution Time");
+    System.out.println("-------------------------------------------------------------------------------------");
+
+    // Binary Search
+    int[] arr = new int[1000000];
+    for (int i = 0; i < arr.length; i++) arr[i] = i + 1;
+
+    Metrics bs = new Metrics();
+    binarySearch(arr, 999999, bs);
+    printLog(bs);
+
+    // Subset Sum Verification
+    int[] subset = {15, 22, 14, 26, 32, 9, 16, 8};
+    Metrics ss1 = new Metrics();
+    verifySubsetSum(subset, 142, ss1);
+    printLog(ss1);
+
+    // Subset Sum Decision
+    int[] set = {3, 34, 4, 12, 5, 2};
+    Metrics ss2 = new Metrics();
+    solveSubsetSum(set, 9, ss2);
+    printLog(ss2);
+
+    // Timeout case
+    int[] largeSet = new int[45];
+    Arrays.fill(largeSet, 10);
+    Metrics ss3 = new Metrics();
+    solveSubsetSum(largeSet, 999, ss3);
+    printLog(ss3);
+
+    // TSP small
+    int[][] graphSmall = {
+            {0,10,15,20},
+            {10,0,35,25},
+            {15,35,0,30},
+            {20,25,30,0}
+    };
+    Metrics tsp1 = new Metrics();
+    tspBruteForce(graphSmall, tsp1);
+    printLog(tsp1);
+
+    // TSP large (timeout)
+    int[][] graphLarge = new int[15][15];
+    for (int[] row : graphLarge) Arrays.fill(row, 10);
+
+    Metrics tsp2 = new Metrics();
+    tspBruteForce(graphLarge, tsp2);
+    printLog(tsp2);
+
+    System.out.println("-------------------------------------------------------------------------------------");
+}
+```
+
+}
