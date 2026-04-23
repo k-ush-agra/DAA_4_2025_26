@@ -1,0 +1,23 @@
+Example:
+s = "rabbbit"
+t = "rabbit"
+
+Step 1:
+n = 7, m = 6
+
+Step 2:
+We try to match characters of t inside s
+
+Key Matching:
+There are 3 ways to remove one 'b' from "rabbbit"
+
+Possible subsequences:
+1. Remove 2nd 'b'
+2. Remove 3rd 'b'
+3. Remove 4th 'b'
+
+Step 3:
+Count total ways = 3
+
+Output:
+3

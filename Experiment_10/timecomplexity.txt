@@ -1,0 +1,12 @@
+Time Complexity:
+O(n × m)
+
+Space Complexity:
+O(n × m)
+
+Where:
+n = length of string s
+m = length of string t
+
+Optimization:
+Space can be reduced to O(m) using 1D DP.

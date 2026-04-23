@@ -1,0 +1,22 @@
+Input:
+
+n = 4
+arr = [1, 6, 11, 5]
+
+Step 1:
+totalSum = 23
+target = 23 / 2 = 11
+
+
+Step 2:
+Possible subset sums near 11:
+Subset1 = {1, 5, 6} → sum = 12
+Subset2 = {11} → sum = 11
+
+
+Step 3:
+Difference = |12 - 11| = 1
+
+Output:
+
+1

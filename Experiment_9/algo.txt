@@ -1,0 +1,22 @@
+1. Take input array of size n
+2. Compute total sum of all elements → totalSum
+
+3. Create DP table dp[n+1][totalSum+1]
+   where dp[i][j] = true if subset of first i elements has sum j
+
+4. Initialize:
+   dp[i][0] = true (sum 0 is always possible)
+
+5. Fill DP table:
+   For each element:
+     If arr[i-1] <= j:
+        dp[i][j] = dp[i-1][j] OR dp[i-1][j - arr[i-1]]
+     Else:
+        dp[i][j] = dp[i-1][j]
+
+6. Find subset sum closest to totalSum/2
+
+7. Compute:
+   minDifference = totalSum - 2 * subsetSum
+
+8. Return minDifference
